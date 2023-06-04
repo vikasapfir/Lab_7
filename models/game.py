@@ -1,4 +1,8 @@
 from abc import ABC, abstractmethod
+from exceptions import TooMuchPlayersException
+from exceptions import NegativeNumberOfPlayersException
+from decorator import logged
+
 """
 This module defines the Game class and provides related functionality.
 """
@@ -32,13 +36,26 @@ class Game(ABC):
   def __getitem__(self, index):
     return list(self.game_themes)[index]
 
-  @abstractmethod
+  @logged(TooMuchPlayersException,"file")
   def connect_player(self):
-    pass
+    """
+        Adds a player to the  game if the maximum number of players hasn't been reached.
+        """
+    if self.current_players < self.max_players:
+      self.current_players += 1
+    else:
+      raise TooMuchPlayersException()
 
-  @abstractmethod
+  @logged(NegativeNumberOfPlayersException,"file")
   def disconnect_player(self):
-    pass
+    """
+        Removes a player from the game if there is at least one player.
+        """
+    if self.current_players > 0:
+      self.current_players -= 1
+    else:
+      raise  NegativeNumberOfPlayersException()
+
 
   def can_play(self):
     """
