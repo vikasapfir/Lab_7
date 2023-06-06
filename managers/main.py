@@ -1,11 +1,8 @@
-from gamemanager import GameManager
-from models.cardgame import CardGame
-from models.boardinggame import BoardingGame
-from models.sportsgame import SportsGame
-from models.computergame import ComputerGame
-from sm import SM
+"""
+Main module for game management.
+"""
 
-
+from models.card_game import CardGame
 
 game = CardGame("UNO", 3, 2, 4, 2002, "test", 1, 70)
 
