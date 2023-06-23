@@ -1,59 +1,63 @@
-"""
-This module contains the GameManager class for managing games.
-"""
-
 class GameManager:
-    """
-    A class for managing games.
-    """
-    games = []
 
-    def add_game(self, game):
-        """Add a game to the list of games."""
-        self.games.append(game)
+  def __init__(self, games=[]):
+    self.games = games
 
-    def remove_game(self, game):
-        """Remove a game from the list of games."""
-        self.games.remove(game)
+  def add_game(self, game):
+    self.games.append(game)
 
-    def remove_by_index(self, index):
-        """Remove a game at the specified index from the list of games."""
-        self.games.pop(index)
+  def remove_game(self, game):
+    self.games.remove(game)
 
-    def find_games_with_release_year_greater_than(self, release_year):
-        """
-        Find games with a release year greater than the specified year.
+  def remove_by_index(self, index):
+    self.games.pop(index)
 
-        Args:
-            release_year (int): The release year to compare.
+  def find_games_with_release_year_greater_than(self, release_year):
+    return [game for game in self.games if game.release_year > release_year]
 
-        Returns:
-            list: A list of games with a release year greater than `release_year`.
-        """
-        return [game for game in self.games if game.release_year > release_year]
+  def find_games_with_current_players_greater_than(self, current_players):
+    return [
+      game for game in self.games if game.current_players > current_players
+    ]
 
-    def find_games_with_current_players_greater_than(self, current_players):
-        """
-        Find games with the current number of players greater than the specified number.
+  def get_games(self):
+    return self.games
 
-        Args:
-            current_players (int): The number of players to compare.
+  def print_all_games(self):
+    for game in self.games:
+      print(game)
 
-        Returns:
-            list: A list of games with a current number of players greater than `current_players`.
-        """
-        return [game for game in self.games if game.current_players > current_players]
+  def __len__(self):
+    return len(self.games)
 
-    def get_games(self):
-        """
-        Get the list of games.
+  def __getitem__(self, index):
+    return self.games[index]
 
-        Returns:
-            list: The list of games.
-        """
-        return self.games
+  def __iter__(self):
+    return iter(self.games)
 
-    def print_all_games(self):
-        """Print all games in the list."""
-        for game in self.games:
-            print(game)
+  def get_common_results(self, method):
+    return [method(game) for game in self.games]
+
+  def get_concatenation_with_index(self):
+    return [f'{index}: {game}' for index, game in enumerate(self.games)]
+
+  def get_zip_results(self, method):
+    return [
+      f'{game}: {result}'
+      for game, result in zip(self.games, self.get_common_results(method))
+    ]
+
+  #формуємо словник з атрибутів
+  def get_attribute_dictionary(self, value_type):
+    return {
+      attr: getattr(game, attr)
+      for game in self.games for attr in vars(game) if
+      not attr.startswith('__') and isinstance(getattr(game, attr), value_type)
+    }
+
+  def check_condition(self, condition):
+    return {
+      'all': all(condition(game) for game in self.games),
+      'any': any(condition(game) for game in self.games)
+    }
